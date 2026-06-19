@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>stegassette</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&family=Newsreader:opsz,wght@6..72,400;6..72,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./generated/stegassette-theme.css" />
+    <link rel="stylesheet" href="./styles/stegassette-site.css" />
+  </head>
+  <body>
+    <main class="site-shell stegassette-container" data-stegassette-container>
+      <section class="hero-section" aria-labelledby="hero-title">
+        <canvas
+          id="hero-canvas"
+          class="hero-canvas"
+          aria-hidden="true"
+        ></canvas>
+        <div class="hero-static-tiles" aria-hidden="true">
+          <div class="hero-tile"></div>
+          <div class="hero-tile"></div>
+          <div class="hero-tile"></div>
+          <div class="hero-tile"></div>
+          <div class="hero-tile"></div>
+          <div class="hero-tile"></div>
+        </div>
+        <div class="hero-vignette" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <h1 id="hero-title" class="type-display-brand">stegassette</h1>
+          <p class="hero-statement type-body-editorial">
+            An homage to performances that have made me feel alive. These images
+            are screenshots of videos, with sound encoded into their pixels.
+            There are no audio files here. Tap an image and listen to it loop.
+          </p>
+        </div>
+      </section>
+
+      <section
+        class="section-shell library-section"
+        aria-label="Records"
+      >
+        <div
+          id="library-grid"
+          class="library-grid"
+          aria-label="Stegassette records"
+        >
+          <!-- LIBRARY_GRID_START -->
+          <button class="library-card" type="button" data-record-id="01-nina-simone.stegassette" data-active="false">
+            <img src="./media/thumbnails/01-nina-simone.stegassette.jpg" alt="A dark square image with Nina Simone&#39;s silhouette leaning to the left, head low, the arch of her neck centered in the frame against a deep charcoal background. In the center, a square of iridescent holographic distortion covers roughly half the image, rendering the original warm tones as shifting silver, blue, and white with subtle rainbow interference patterns." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Nina Simone</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="02-mdou-moctar.stegassette" data-active="false">
+            <img src="./media/thumbnails/02-mdou-moctar.stegassette.jpg" alt="A warm square photograph of Mdou Moctar playing an electric guitar in formal Saharan clothing, surrounded by people dancing outdoors in the dark under harsh directional lighting. The veil combine creates a soft double-exposure effect — a translucent ghost of the same scene is laid over itself, blending the warm oranges, browns, and earth tones into a diffuse dreamlike doubling across the full image. There is no distinct distortion region or noise." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Mdou Moctar</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="03-anohni.stegassette" data-active="false">
+            <img src="./media/thumbnails/03-anohni.stegassette.jpg" alt="Medium-long shot high angle of Anohni Hegarty singing on stage. Blobs and splotches of white yellow magenta lime and blue distort the entire image." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Anohni</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="04-j-dilla.stegassette" data-active="false">
+            <img src="./media/thumbnails/04-j-dilla.stegassette.jpg" alt="A lofi close-up of J Dilla holding a microphone to his mouth, looking left, wearing a ballcap in a live stage setting. The midpoint combine and angled traversal have cast the entire image in a uniform cool blue-gray wash — there is no distinct distortion region, just a smooth blue-toned rendering of the original low-resolution footage." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">J Dilla</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="05-ted-hawkins.stegassette" data-active="false">
+            <img src="./media/thumbnails/05-ted-hawkins.stegassette.jpg" alt="A medium VHS-recorded shot of Ted Hawkins sitting on a makeshift stool on the Venice Beach boardwalk, longsleeve shirt, ballcap, acoustic guitar in hand. The cropped letters &#39;Ed Hawk&#39; can be seen in tall handwriting on a open guitar case on the right side of the image on the ground. The image is sunlit high contrast with a lot of white and green. In the center is a square covering half the image with intense red, blue, yellow, and green noise." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Ted Hawkins</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="06-rl-burnside.stegassette" data-active="false">
+            <img src="./media/thumbnails/06-rl-burnside.stegassette.jpg" alt="Medium shot of R.L. Burnside standing over a long log in a yard holding an axe, surrounded by grass and trees. The image is VHS-recorded with saturated greens. In the center is a square covering roughly a third of the image with red-orange distortion and teal-cyan edging, creating a heat-signature-like overlay over his figure." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">R.L. Burnside</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="07-mavis-staples.stegassette" data-active="false">
+            <img src="./media/thumbnails/07-mavis-staples.stegassette.jpg" alt="A close-up of Mavis Staples singing with her mouth open, eyes closed, hands raised open at shoulder height. The outer image is dark grayscale. The additive channel operations create a large deep indigo-blue square covering the center, with yellow-green coloration visible on her face and skin within it. The contrast between the blue field and warm yellow-green undertones gives the image an otherworldly quality." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">The Staple Singers</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="08-janie-hunter.stegassette" data-active="false">
+            <img src="./media/thumbnails/08-janie-hunter.stegassette.jpg" alt="A close-up of Janie Hunter and other Moving Star Hall singers, shot on VHS. The image is predominantly dark navy blue — the stacked channel operations (midpoint, xor, echo) render the scene in very low contrast, with figures barely discernible in the deep murk. The effect is subdued and somber rather than bright, giving the image an almost underwater quality." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Janie Hunter and the Moving Star Hall Singers</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="09-cameron-winter.stegassette" data-active="false">
+            <img src="./media/thumbnails/09-cameron-winter.stegassette.jpg" alt="A medium shot of Cameron Winter playing an upright piano on a spotlit stage, facing to the left and away from the audience. He is wearing a white T-shirt, there are two directional microphones hovering above the piano like antennae, facing down. The back of the heads of many audience members are at the base of the image. A centered distortion square covers two thirds of the image increasing the presence of reds on the primarily blue and white image." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Cameron Winter</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="10-sufjan-stevens.stegasette" data-active="false">
+            <img src="./media/thumbnails/10-sufjan-stevens.stegasette.jpg" alt="A heavily distorted image with Sufjan Stevens&#39; face at the lower center — cap on, singing into a microphone, arms raised bearing angel wings. The spiral traversal and difference combine fracture and displace the photo into a radiating mandala-like pattern of torn fragments in blues, cyans, beiges, and oranges. A ghostlike inverted reflection of his head appears above him, and the wings create large mirrored shapes extending toward the corners." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Sufjan Stevens</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="11-aretha-franklin.stegasette" data-active="false">
+            <img src="./media/thumbnails/11-aretha-franklin.stegasette.jpg" alt="A medium shot of Aretha Franklin singing into a microphone at a church podium, wearing a light-colored outfit. Behind her, robed choir members fill the frame alongside other musicians; an American flag is visible in the upper right. A large centered square covering roughly half the image is filled with intense magenta and lime green distortion, inverting and oversaturating the original warm film tones where Aretha stands. The outer edges of the image retain the natural color of the church setting." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Aretha Franklin</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="12-paul-robeson.stegasette" data-active="false">
+            <img src="./media/thumbnails/12-paul-robeson.stegasette.jpg" alt="A black and white close-up of Paul Robeson&#39;s face with his mouth wide open in song, doubled horizontally across the frame. The mirror-x keymap creates a bilateral diptych — his face is reflected so two nearly identical open-mouthed singing faces appear side by side, giving the grainy television image an uncanny symmetry." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Paul Robeson</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="13-pete-seeger.stegasette" data-active="false">
+            <img src="./media/thumbnails/13-pete-seeger.stegasette.jpg" alt="A full-image blue rendering — the echo and midpoint channel operations have cast the entire photograph in deep indigo and cobalt blue. The underlying image shows a man playing an electric guitar, body angled back with the neck raised upward, performing with audience members behind him. Faint yellow-gold details emerge through the blue suggesting stage lighting, and the guitar&#39;s frets and tuning pegs are faintly visible." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Pete Seeger</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="14-emahoy-tsege-mariam-gebru.stegassette" data-active="false">
+            <img src="./media/thumbnails/14-emahoy-tsege-mariam-gebru.stegassette.jpg" alt="A small, intimate image of an elderly woman seated at a grand piano, shown in profile facing right with her hands on the keys and sheet music on the stand. The room is very dark. Subtle patches of teal and blue-green distortion appear in the upper left of the frame, slightly shifting the ambient cool darkness of the room. The effect is restrained, preserving much of the original image&#39;s quiet atmosphere." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Emahoy Tsege Mariam Gebru</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="15-jason-molina.stegassette" data-active="false">
+            <img src="./media/thumbnails/15-jason-molina.stegassette.jpg" alt="A medium shot of Jason Molina seated at a microphone, head bowed downward, in a record store — shelves of records and posters visible in the background. A large orange-red rectangle covers the central two-thirds of the image in warm distortion. Within the rectangle, two small isolated bright blocks appear — one pale blue and one yellow — like corrupted color artifacts against the orange wash. The outer edges retain the natural warm brown tones of the shop." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Jason Molina</span>
+            </span>
+          </button>
+
+          <button class="library-card" type="button" data-record-id="16-burning-spear.stegassette" data-active="false">
+            <img src="./media/thumbnails/16-burning-spear.stegassette.jpg" alt="A dim, low-contrast performance photograph showing several figures in a dark indoor setting. A centered deep violet-purple square covers the middle third of the image, rendering the figures within it as blue-purple shapes with faint lime-yellow highlights. To the left, a figure in light blue clothing is visible outside the distortion. The surrounding image is dark and muted with warm reddish ambient light." loading="lazy" width="800" height="800" />
+            <span class="card-meta">
+              <span class="type-library-title">Burning Spear</span>
+            </span>
+          </button><!-- LIBRARY_GRID_END -->
+        </div>
+      </section>
+
+      <div
+        id="track-list"
+        class="track-list"
+        aria-label="Featured stegassette tracks"
+      >
+        <!-- TRACK_LIST_START -->
+        <article class="track-spotlight" id="track-01" data-record-id="01-nina-simone.stegassette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/01-nina-simone.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/01-nina-simone.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Nina Simone — I Wish I Knew How It Would Feel to Be Free">
+                <img class="spotlight-image" src="./media/thumbnails/01-nina-simone.stegassette.jpg" data-full-src="./media/01-nina-simone.stegassette.png" alt="A dark square image with Nina Simone&#39;s silhouette leaning to the left, head low, the arch of her neck centered in the frame against a deep charcoal background. In the center, a square of iridescent holographic distortion covers roughly half the image, rendering the original warm tones as shifting silver, blue, and white with subtle rainbow interference patterns." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">01</p>
+                <h2 class="type-display-feature">Nina Simone</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=SzEDYoE7YQ4" target="_blank" rel="noreferrer">I Wish I Knew How It Would Feel to Be Free</a></p>
+                  <p class="spotlight-location-date">The Village Gate, New York City, NY, 1968</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded at The Village Gate nightclub in Greenwich Village, New York City, circa 1968. The Village Gate was a landmark jazz and folk venue that operated from 1958 to 1993 at the corner of Bleecker and Thompson Streets. <a href="https://en.wikipedia.org/wiki/Village_Gate" target="_blank" rel="noreferrer">en.wikipedia.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: difference</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>100</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-02" data-record-id="02-mdou-moctar.stegassette" data-theme="dark" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/02-mdou-moctar.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/02-mdou-moctar.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Mdou Moctar — Maheyega Assouf Igan">
+                <img class="spotlight-image" src="./media/thumbnails/02-mdou-moctar.stegassette.jpg" data-full-src="./media/02-mdou-moctar.stegassette.png" alt="A warm square photograph of Mdou Moctar playing an electric guitar in formal Saharan clothing, surrounded by people dancing outdoors in the dark under harsh directional lighting. The veil combine creates a soft double-exposure effect — a translucent ghost of the same scene is laid over itself, blending the warm oranges, browns, and earth tones into a diffuse dreamlike doubling across the full image. There is no distinct distortion region or noise." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">02</p>
+                <h2 class="type-display-feature">Mdou Moctar</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=jYJGP0FBaT0" target="_blank" rel="noreferrer">Maheyega Assouf Igan</a></p>
+                  <p class="spotlight-location-date">Tchin-Tabaraden, Niger, 2012</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Filmed at a private wedding in Tchin-Tabaraden, Moctar&#39;s hometown in the Tahoua Region of Niger. Uploaded to YouTube on April 13, 2012. The footage was documented by Sahel Sounds and helped introduce Moctar to international audiences. <a href="http://tropicalizer.blogspot.com/2013/10/guitarist-mdou-moctar-at-wedding-in.html" target="_blank" rel="noreferrer">tropicalizer.blogspot.com</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: veil</dd></div>
+                  <div><dt>Traversal</dt><dd>center-out</dd></div>
+                  <div><dt>Keymap</dt><dd>rotate</dd></div>
+                  <div><dt>Border</dt><dd>0</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-03" data-record-id="03-anohni.stegassette" data-theme="plum" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/03-anohni.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/03-anohni.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Anohni — If It Be Your Will">
+                <img class="spotlight-image" src="./media/thumbnails/03-anohni.stegassette.jpg" data-full-src="./media/03-anohni.stegassette.png" alt="Medium-long shot high angle of Anohni Hegarty singing on stage. Blobs and splotches of white yellow magenta lime and blue distort the entire image." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">03</p>
+                <h2 class="type-display-feature">Anohni</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=1MDlMdu2gjw" target="_blank" rel="noreferrer">If It Be Your Will</a></p>
+                  <p class="spotlight-location-date">Sydney Opera House, Sydney, Australia, January 28–30, 2005</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded at the Concert Hall of the Sydney Opera House as part of &#39;Came So Far for Beauty,&#39; a Leonard Cohen tribute concert produced by Hal Willner for the Sydney Festival. The concert ran January 28–30, 2005. Footage was filmed for the 2005 documentary Leonard Cohen: I&#39;m Your Man, directed by Lian Lunson. <a href="https://en.wikipedia.org/wiki/Leonard_Cohen:_I%27m_Your_Man" target="_blank" rel="noreferrer">en.wikipedia.org</a> <a href="https://www.setlist.fm/setlist/various-artists/2005/concert-hall-sydney-opera-house-sydney-australia-7393d6e5.html" target="_blank" rel="noreferrer">setlist.fm</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: difference</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>poles</dd></div>
+                  <div><dt>Border</dt><dd>1</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-04" data-record-id="04-j-dilla.stegassette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/04-j-dilla.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/04-j-dilla.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play J Dilla — F*ck the Police">
+                <img class="spotlight-image" src="./media/thumbnails/04-j-dilla.stegassette.jpg" data-full-src="./media/04-j-dilla.stegassette.png" alt="A lofi close-up of J Dilla holding a microphone to his mouth, looking left, wearing a ballcap in a live stage setting. The midpoint combine and angled traversal have cast the entire image in a uniform cool blue-gray wash — there is no distinct distortion region, just a smooth blue-toned rendering of the original low-resolution footage." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">04</p>
+                <h2 class="type-display-feature">J Dilla</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=_6GX7RoSXR8" target="_blank" rel="noreferrer">F*ck the Police</a></p>
+                  <p class="spotlight-location-date">Jazz Cafe, London, England, May 1, 2004</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Performed at the Jazz Cafe in Camden, London on May 1, 2004 — one of Dilla&#39;s rare documented live appearances. The Jazz Cafe is a 440-capacity intimate venue known for jazz and hip-hop. <a href="https://www.setlist.fm/setlist/j-dilla/2004/jazz-cafe-london-england-53b573b5.html" target="_blank" rel="noreferrer">setlist.fm</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: midpoint</dd></div>
+                  <div><dt>Traversal</dt><dd>angle</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>100</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-05" data-record-id="05-ted-hawkins.stegassette" data-theme="dark" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/05-ted-hawkins.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/05-ted-hawkins.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Ted Hawkins — Just One Look">
+                <img class="spotlight-image" src="./media/thumbnails/05-ted-hawkins.stegassette.jpg" data-full-src="./media/05-ted-hawkins.stegassette.png" alt="A medium VHS-recorded shot of Ted Hawkins sitting on a makeshift stool on the Venice Beach boardwalk, longsleeve shirt, ballcap, acoustic guitar in hand. The cropped letters &#39;Ed Hawk&#39; can be seen in tall handwriting on a open guitar case on the right side of the image on the ground. The image is sunlit high contrast with a lot of white and green. In the center is a square covering half the image with intense red, blue, yellow, and green noise." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">05</p>
+                <h2 class="type-display-feature">Ted Hawkins</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=iy9JL_FKnW4" target="_blank" rel="noreferrer">Just One Look</a></p>
+                  <p class="spotlight-location-date">Venice Beach Boardwalk, Los Angeles, CA, 1990</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded on the Venice Beach Boardwalk, where Hawkins was a fixture as a street performer in the late 1980s and early 1990s following his return from a period living in England. His boardwalk performances from this era were later compiled on the albums &#39;On the Boardwalk (The Venice Beach Tapes)&#39; and &#39;Songs from Venice Beach.&#39; <a href="https://en.wikipedia.org/wiki/Ted_Hawkins" target="_blank" rel="noreferrer">en.wikipedia.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: difference</dd></div>
+                  <div><dt>Traversal</dt><dd>spiral</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>150</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-06" data-record-id="06-rl-burnside.stegassette" data-theme="plum" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/06-rl-burnside.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/06-rl-burnside.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play R.L. Burnside — Wood-Chopping Holler">
+                <img class="spotlight-image" src="./media/thumbnails/06-rl-burnside.stegassette.jpg" data-full-src="./media/06-rl-burnside.stegassette.png" alt="Medium shot of R.L. Burnside standing over a long log in a yard holding an axe, surrounded by grass and trees. The image is VHS-recorded with saturated greens. In the center is a square covering roughly a third of the image with red-orange distortion and teal-cyan edging, creating a heat-signature-like overlay over his figure." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">06</p>
+                <h2 class="type-display-feature">R.L. Burnside</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=2vy0dMXhlWI" target="_blank" rel="noreferrer">Wood-Chopping Holler</a></p>
+                  <p class="spotlight-location-date">Independence, Tate County, MS, August 28, 1978</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Filmed on August 28, 1978 at Burnside&#39;s farm in Independence, Tate County, Mississippi, by Alan Lomax, Worth Long, and John Bishop as part of the American Patchwork documentary project. Documented as Burnside&#39;s first film appearance. <a href="https://archive.culturalequity.org/film-and-video/american-patchwork/rl-burnsides-wood-chopping-holler-1978" target="_blank" rel="noreferrer">archive.culturalequity.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:additive · G:passthrough · B:passthrough</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>200</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-07" data-record-id="07-mavis-staples.stegassette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/07-mavis-staples.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/07-mavis-staples.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play The Staple Singers — Sit Down Servant">
+                <img class="spotlight-image" src="./media/thumbnails/07-mavis-staples.stegassette.jpg" data-full-src="./media/07-mavis-staples.stegassette.png" alt="A close-up of Mavis Staples singing with her mouth open, eyes closed, hands raised open at shoulder height. The outer image is dark grayscale. The additive channel operations create a large deep indigo-blue square covering the center, with yellow-green coloration visible on her face and skin within it. The contrast between the blue field and warm yellow-green undertones gives the image an otherworldly quality." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">07</p>
+                <h2 class="type-display-feature">The Staple Singers</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=YxgZuE14he8" target="_blank" rel="noreferrer">Sit Down Servant</a></p>
+                  <p class="spotlight-location-date">Unknown, 1960s</p>
+                </div>
+                <p class="spotlight-details type-body-compact">A television broadcast, likely from the early 1960s. The specific program has not been confirmed, but the Staple Singers were regular guests on Jubilee Showcase, a gospel music program on WLS-TV (ABC&#39;s Chicago affiliate, Channel 7) that ran from 1963 to 1984 and is the most likely context for this appearance. <a href="https://www.jubileeshowcase.com/featured_gospel_artists.html" target="_blank" rel="noreferrer">jubileeshowcase.com</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:midpoint · G:passthrough · B:echo</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>150</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-08" data-record-id="08-janie-hunter.stegassette" data-theme="dark" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/08-janie-hunter.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/08-janie-hunter.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Janie Hunter and the Moving Star Hall Singers — Jonah">
+                <img class="spotlight-image" src="./media/thumbnails/08-janie-hunter.stegassette.jpg" data-full-src="./media/08-janie-hunter.stegassette.png" alt="A close-up of Janie Hunter and other Moving Star Hall singers, shot on VHS. The image is predominantly dark navy blue — the stacked channel operations (midpoint, xor, echo) render the scene in very low contrast, with figures barely discernible in the deep murk. The effect is subdued and somber rather than bright, giving the image an almost underwater quality." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">08</p>
+                <h2 class="type-display-feature">Janie Hunter and the Moving Star Hall Singers</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=3yG2z6GC4Ww" target="_blank" rel="noreferrer">Jonah</a></p>
+                  <p class="spotlight-location-date">Moving Star Hall, Johns Island, SC, August 1983</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Filmed by Alan Lomax and crew at Moving Star Hall on Johns Island, South Carolina, in August 1983, as part of the American Patchwork documentary series. Moving Star Hall is a historic praise house central to the Gullah Geechee community. <a href="https://archive.culturalequity.org/film-and-video/american-patchwork/janie-hunter-and-moving-star-hall-singers-jonah-1983" target="_blank" rel="noreferrer">archive.culturalequity.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:midpoint · G:xor · B:echo</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>10</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-09" data-record-id="09-cameron-winter.stegassette" data-theme="plum" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/09-cameron-winter.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/09-cameron-winter.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Cameron Winter — Love Takes Miles / Drinking Age">
+                <img class="spotlight-image" src="./media/thumbnails/09-cameron-winter.stegassette.jpg" data-full-src="./media/09-cameron-winter.stegassette.png" alt="A medium shot of Cameron Winter playing an upright piano on a spotlit stage, facing to the left and away from the audience. He is wearing a white T-shirt, there are two directional microphones hovering above the piano like antennae, facing down. The back of the heads of many audience members are at the base of the image. A centered distortion square covers two thirds of the image increasing the presence of reds on the primarily blue and white image." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">09</p>
+                <h2 class="type-display-feature">Cameron Winter</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=rU4BRPRlNn0" target="_blank" rel="noreferrer">Love Takes Miles / Drinking Age</a></p>
+                  <p class="spotlight-location-date">Sleeping Village, Chicago, IL, January 18, 2025</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded at Sleeping Village in the Avondale neighborhood of Chicago, Illinois, on January 18, 2025. <a href="https://www.setlist.fm/setlist/cameron-winter/2025/sleeping-village-chicago-il-5b5f6728.html" target="_blank" rel="noreferrer">setlist.fm</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:echo · G:passthrough · B:passthrough</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>0.25</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-10" data-record-id="10-sufjan-stevens.stegasette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/10-sufjan-stevens.stegasette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/10-sufjan-stevens.stegasette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Sufjan Stevens — Seven Swans">
+                <img class="spotlight-image" src="./media/thumbnails/10-sufjan-stevens.stegasette.jpg" data-full-src="./media/10-sufjan-stevens.stegasette.png" alt="A heavily distorted image with Sufjan Stevens&#39; face at the lower center — cap on, singing into a microphone, arms raised bearing angel wings. The spiral traversal and difference combine fracture and displace the photo into a radiating mandala-like pattern of torn fragments in blues, cyans, beiges, and oranges. A ghostlike inverted reflection of his head appears above him, and the wings create large mirrored shapes extending toward the corners." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">10</p>
+                <h2 class="type-display-feature">Sufjan Stevens</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=nP6AIXTSqsM" target="_blank" rel="noreferrer">Seven Swans</a></p>
+                  <p class="spotlight-location-date">Union Park, Chicago, IL, July 16, 2016</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Performed at the Pitchfork Music Festival on July 16, 2016 (Day 2 of the three-day festival) at Union Park, Chicago. <a href="https://www.setlist.fm/setlist/sufjan-stevens/2016/union-park-chicago-il-73ff36c5.html" target="_blank" rel="noreferrer">setlist.fm</a> <a href="https://en.wikipedia.org/wiki/Pitchfork_Music_Festival_2016" target="_blank" rel="noreferrer">en.wikipedia.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: difference</dd></div>
+                  <div><dt>Traversal</dt><dd>spiral</dd></div>
+                  <div><dt>Keymap</dt><dd>poles</dd></div>
+                  <div><dt>Border</dt><dd>0</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-11" data-record-id="11-aretha-franklin.stegasette" data-theme="dark" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/11-aretha-franklin.stegasette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/11-aretha-franklin.stegasette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Aretha Franklin — Amazing Grace">
+                <img class="spotlight-image" src="./media/thumbnails/11-aretha-franklin.stegasette.jpg" data-full-src="./media/11-aretha-franklin.stegasette.png" alt="A medium shot of Aretha Franklin singing into a microphone at a church podium, wearing a light-colored outfit. Behind her, robed choir members fill the frame alongside other musicians; an American flag is visible in the upper right. A large centered square covering roughly half the image is filled with intense magenta and lime green distortion, inverting and oversaturating the original warm film tones where Aretha stands. The outer edges of the image retain the natural color of the church setting." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">11</p>
+                <h2 class="type-display-feature">Aretha Franklin</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=CBKwV6oNYvw" target="_blank" rel="noreferrer">Amazing Grace</a></p>
+                  <p class="spotlight-location-date">New Temple Missionary Baptist Church, Los Angeles, CA, January 13–14, 1972</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded over two nights — January 13 and 14, 1972 — at New Temple Missionary Baptist Church in the Watts neighborhood of Los Angeles, with Reverend James Cleveland and the Southern California Community Choir. Produced by Jerry Wexler for Atlantic Records. The sessions were also filmed by Sydney Pollack; that footage was eventually released as the documentary Amazing Grace in 2018. <a href="https://en.wikipedia.org/wiki/Amazing_Grace_(Aretha_Franklin_album" target="_blank" rel="noreferrer">en.wikipedia.org</a>)</p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:echo · G:midpoint · B:subtractive</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>500</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-12" data-record-id="12-paul-robeson.stegasette" data-theme="plum" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/12-paul-robeson.stegasette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/12-paul-robeson.stegasette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Paul Robeson — Ol&#39; Man River">
+                <img class="spotlight-image" src="./media/thumbnails/12-paul-robeson.stegasette.jpg" data-full-src="./media/12-paul-robeson.stegasette.png" alt="A black and white close-up of Paul Robeson&#39;s face with his mouth wide open in song, doubled horizontally across the frame. The mirror-x keymap creates a bilateral diptych — his face is reflected so two nearly identical open-mouthed singing faces appear side by side, giving the grainy television image an uncanny symmetry." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">12</p>
+                <h2 class="type-display-feature">Paul Robeson</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=iEQEeNhtosg" target="_blank" rel="noreferrer">Ol&#39; Man River</a></p>
+                  <p class="spotlight-location-date">Warsaw, Poland, 1949</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Archival footage compiled in &#39;Paul Robeson: Tribute to an Artist&#39; (1979), a documentary short directed by Saul J. Turell and narrated by Sidney Poitier. The performance clip is allegedly from Robeson&#39;s European concert tour in Warsaw, 1949. The documentary traces his evolving performances of &#39;Ol&#39; Man River&#39; — from Oscar Hammerstein&#39;s original text to Robeson&#39;s own protest rewrite. Won the Academy Award for Documentary Short Subject at the 52nd Academy Awards (1980). <a href="https://en.wikipedia.org/wiki/Paul_Robeson:_Tribute_to_an_Artist" target="_blank" rel="noreferrer">en.wikipedia.org</a> <a href="https://www.imdb.com/title/tt0079704/" target="_blank" rel="noreferrer">imdb.com</a> <a href="https://archive.org/details/paul-robeson-tribute-to-an-artist" target="_blank" rel="noreferrer">archive.org</a> <a href="https://www.criterion.com/films/808-paul-robeson-tribute-to-an-artist" target="_blank" rel="noreferrer">criterion.com</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>RGB: midpoint</dd></div>
+                  <div><dt>Traversal</dt><dd>angle</dd></div>
+                  <div><dt>Keymap</dt><dd>mirror-x</dd></div>
+                  <div><dt>Border</dt><dd>0</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-13" data-record-id="13-pete-seeger.stegasette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/13-pete-seeger.stegasette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/13-pete-seeger.stegasette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Pete Seeger — Which Side Are You On?">
+                <img class="spotlight-image" src="./media/thumbnails/13-pete-seeger.stegasette.jpg" data-full-src="./media/13-pete-seeger.stegasette.png" alt="A full-image blue rendering — the echo and midpoint channel operations have cast the entire photograph in deep indigo and cobalt blue. The underlying image shows a man playing an electric guitar, body angled back with the neck raised upward, performing with audience members behind him. Faint yellow-gold details emerge through the blue suggesting stage lighting, and the guitar&#39;s frets and tuning pegs are faintly visible." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">13</p>
+                <h2 class="type-display-feature">Pete Seeger</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=mbyaliQP-x0" target="_blank" rel="noreferrer">Which Side Are You On?</a></p>
+                  <p class="spotlight-location-date">Sweden, 1968</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Recorded in Sweden in 1968. Part of a documented series of approximately 14 tracks recorded on this trip, sometimes listed as &#39;Pete Seeger: Sweden 1968.&#39; Whether it was a concert or a television/radio broadcast has not been confirmed; specific city and venue are unknown. <a href="https://www.last.fm/music/Pete+Seeger/Sweden+1968" target="_blank" rel="noreferrer">last.fm</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:midpoint · G:midpoint · B:echo</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>poles</dd></div>
+                  <div><dt>Border</dt><dd>0</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-14" data-record-id="14-emahoy-tsege-mariam-gebru.stegassette" data-theme="dark" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/14-emahoy-tsege-mariam-gebru.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/14-emahoy-tsege-mariam-gebru.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Emahoy Tsege Mariam Gebru — Tezeta">
+                <img class="spotlight-image" src="./media/thumbnails/14-emahoy-tsege-mariam-gebru.stegassette.jpg" data-full-src="./media/14-emahoy-tsege-mariam-gebru.stegassette.png" alt="A small, intimate image of an elderly woman seated at a grand piano, shown in profile facing right with her hands on the keys and sheet music on the stand. The room is very dark. Subtle patches of teal and blue-green distortion appear in the upper left of the frame, slightly shifting the ambient cool darkness of the room. The effect is restrained, preserving much of the original image&#39;s quiet atmosphere." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">14</p>
+                <h2 class="type-display-feature">Emahoy Tsege Mariam Gebru</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=SNW5T-t40sU" target="_blank" rel="noreferrer">Tezeta</a></p>
+                  <p class="spotlight-location-date">Washington DC Jewish Community Center, Washington, DC, July 12, 2008</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Benefit concert on July 12, 2008 at the Washington DC Jewish Community Center (DCJCC). Proceeds supported the Emahoy Tsege Mariam Music (ETM) Foundation. Widely described as her first public performance in 35 years. <a href="http://www.tadias.com/07/08/2008/historic-concert-by-ethiopian-nun-pianist-composer-in-dc/" target="_blank" rel="noreferrer">tadias.com</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:passthrough · G:midpoint · B:echo</dd></div>
+                  <div><dt>Traversal</dt><dd>spiral</dd></div>
+                  <div><dt>Keymap</dt><dd>mirror-y</dd></div>
+                  <div><dt>Border</dt><dd>20</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-15" data-record-id="15-jason-molina.stegassette" data-theme="plum" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/15-jason-molina.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/15-jason-molina.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Jason Molina — Hold On Magnolia">
+                <img class="spotlight-image" src="./media/thumbnails/15-jason-molina.stegassette.jpg" data-full-src="./media/15-jason-molina.stegassette.png" alt="A medium shot of Jason Molina seated at a microphone, head bowed downward, in a record store — shelves of records and posters visible in the background. A large orange-red rectangle covers the central two-thirds of the image in warm distortion. Within the rectangle, two small isolated bright blocks appear — one pale blue and one yellow — like corrupted color artifacts against the orange wash. The outer edges retain the natural warm brown tones of the shop." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">15</p>
+                <h2 class="type-display-feature">Jason Molina</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=YQtjwVTJUgw" target="_blank" rel="noreferrer">Hold On Magnolia</a></p>
+                  <p class="spotlight-location-date">Acme Comics &amp; Records, Columbia, SC, December 3, 2006</p>
+                </div>
+                <p class="spotlight-details type-body-compact">Soundboard recording (Track 6 of 17) taped by &#39;2000 Flushes&#39; at Acme Comics &amp; Records in Columbia, South Carolina, on December 3, 2006, during Molina&#39;s fall 2006 American solo tour. <a href="https://jasonmolina.com/tour-archive/2006" target="_blank" rel="noreferrer">jasonmolina.com</a> <a href="https://content.jasonmolina.org/post/22261565741/live-from-south-carolina-jason-molina" target="_blank" rel="noreferrer">content.jasonmolina.org</a></p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:echo · G:midpoint · B:passthrough</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>mirror-x</dd></div>
+                  <div><dt>Border</dt><dd>300</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="track-spotlight" id="track-16" data-record-id="16-burning-spear.stegassette" data-theme="light" data-active="false">
+          <img class="spotlight-section-bg" src="./media/thumbnails/16-burning-spear.stegassette.jpg" alt="" loading="lazy" />
+          <div class="spotlight-inner">
+            <div class="spotlight-media">
+              <img class="spotlight-bg" src="./media/thumbnails/16-burning-spear.stegassette.jpg" alt="" loading="lazy" />
+              <button class="spotlight-frame" type="button" aria-label="Play Burning Spear — Jah No Dead">
+                <img class="spotlight-image" src="./media/thumbnails/16-burning-spear.stegassette.jpg" data-full-src="./media/16-burning-spear.stegassette.png" alt="A dim, low-contrast performance photograph showing several figures in a dark indoor setting. A centered deep violet-purple square covers the middle third of the image, rendering the figures within it as blue-purple shapes with faint lime-yellow highlights. To the left, a figure in light blue clothing is visible outside the distortion. The surrounding image is dark and muted with warm reddish ambient light." loading="lazy" />
+                <canvas class="spotlight-recon" aria-hidden="true"></canvas>
+                <canvas class="spotlight-overlay" aria-hidden="true"></canvas>
+              </button>
+            </div>
+            <div class="spotlight-content">
+              <div class="spotlight-copy">
+                <p class="type-meta-label">16</p>
+                <h2 class="type-display-feature">Burning Spear</h2>
+                <div class="spotlight-lockup type-body-editorial">
+                  <p class="spotlight-song"><a href="https://www.youtube.com/watch?v=sGQlDLBRKAU" target="_blank" rel="noreferrer">Jah No Dead</a></p>
+                  <p class="spotlight-location-date">Jamaica, 1978</p>
+                </div>
+                <p class="spotlight-details type-body-compact">A scene from Rockers (1978), directed by Ted Bafaloukos and shot entirely on location in Jamaica. The &#39;Jah No Dead&#39; sequence was filmed at the ruins of a colonial-era jailhouse near the sea. The song was composed specifically for the film. Leroy &#39;Horsemouth&#39; Wallace plays the lead character. <a href="https://en.wikipedia.org/wiki/Rockers_(1978_film" target="_blank" rel="noreferrer">en.wikipedia.org</a>)</p>
+              </div>
+              <div class="spotlight-controls">
+                <dl class="spotlight-params">
+                  <div><dt>Combine</dt><dd>R:midpoint · G:passthrough · B:additive</dd></div>
+                  <div><dt>Traversal</dt><dd>raster</dd></div>
+                  <div><dt>Keymap</dt><dd>adjacent</dd></div>
+                  <div><dt>Border</dt><dd>800</dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </article><!-- TRACK_LIST_END -->
+      </div>
+
+      <section
+        class="section-shell pattern-overview-section"
+        aria-labelledby="pattern-overview-title"
+      >
+        <h2 id="pattern-overview-title" class="sr-only">Traversal and keymap patterns</h2>
+        <div class="pattern-overview-grid">
+          <div class="pattern-panel-heading traversal-heading">
+            <h3 class="type-parameter-label">9 traversal types</h3>
+            <p class="type-body-compact">
+              The traversal determines the order interior data pixels are
+              visited. White marks the path as it advances.
+            </p>
+          </div>
+          <div
+            id="traversal-overview-grid"
+            class="pattern-card-grid"
+            aria-label="Traversal pattern overview"
+          ></div>
+          <div class="pattern-panel-heading keymap-heading">
+            <h3 class="type-parameter-label">6 keymap types</h3>
+            <p class="type-body-compact">
+              For each data pixel (white), the keymap selects a key pixel
+              (orange). Those pairs feed the combine operation used by the
+              interactive explorer below.
+            </p>
+          </div>
+          <div
+            id="keymap-overview-grid"
+            class="pattern-card-grid"
+            aria-label="Keymap pattern overview"
+          ></div>
+        </div>
+        <div class="pattern-legend" aria-label="Pattern color legend">
+          <span><i data-kind="data"></i>data path</span>
+          <span><i data-kind="key"></i>key pixel</span>
+          <span><i data-kind="border"></i>border</span>
+        </div>
+      </section>
+
+      <section
+        class="section-shell interactive-section"
+        aria-labelledby="combine-title"
+      >
+        <div class="interactive-layout">
+          <div class="combine-col">
+            <div class="section-heading">
+              <h2 id="combine-title" class="type-meta-label">combine equations</h2>
+            </div>
+            <div class="combine-controls">
+              <label class="combine-select-wrap" for="combine-select">
+                <select id="combine-select" aria-label="Combine type"></select>
+              </label>
+              <p id="combine-select-desc" class="type-body-compact combine-select-desc"></p>
+            </div>
+            <div class="equation-workbench">
+              <div class="range-grid">
+                <label class="range-control">
+                  <span class="type-meta-label">data byte</span>
+                  <input
+                    id="data-byte"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value="18"
+                  />
+                  <output id="data-output">18</output>
+                </label>
+                <label class="range-control">
+                  <span class="type-meta-label">key byte</span>
+                  <input
+                    id="key-byte"
+                    type="range"
+                    min="0"
+                    max="255"
+                    value="154"
+                  />
+                  <output id="key-output">154</output>
+                </label>
+              </div>
+              <div
+                id="pixel-transform"
+                class="pixel-transform"
+                aria-live="polite"
+              ></div>
+              <div class="formula-grid">
+                <div>
+                  <p class="type-meta-label">formula</p>
+                  <pre id="combine-formula"></pre>
+                </div>
+                <div>
+                  <p class="type-meta-label">calculation</p>
+                  <pre id="combine-calculation"></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="traversal-col">
+            <div class="section-heading traversal-col-heading">
+              <h2 id="traversal-title" class="type-meta-label">traversal &times; keymap</h2>
+            </div>
+            <div class="explorer-canvas-wrap">
+              <canvas
+                id="explorer-canvas"
+                width="504"
+                height="504"
+                aria-label="Traversal and keymap explorer"
+              ></canvas>
+            </div>
+            <div class="explorer-controls">
+              <div class="explorer-selects">
+                <div class="explorer-select-group">
+                  <select id="traversal-select"></select>
+                  <p class="type-parameter-label">traversal</p>
+                </div>
+                <div class="explorer-select-group">
+                  <select id="keymap-select"></select>
+                  <p class="type-parameter-label">keymap</p>
+                </div>
+              </div>
+              <div class="explorer-speed-row">
+                <div class="range-control">
+                  <span class="type-meta-label">speed</span>
+                  <input
+                    id="explorer-speed"
+                    type="range"
+                    min="60"
+                    max="600"
+                    step="20"
+                    value="180"
+                  />
+                  <output id="speed-output">180ms</output>
+                </div>
+                <button id="explorer-toggle" class="text-command" type="button">
+                  Pause
+                </button>
+              </div>
+              <dl id="pixel-readout" class="meta-list inverse"></dl>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./references/lib/steg-core.js"></script>
+    <script>
+      window.StegCore = StegCore;
+    </script>
+    <script type="module" src="./scripts/main.js"></script>
+  </body>
+</html>

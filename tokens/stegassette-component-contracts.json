@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "source": "Config 2026 task 40000067:5253",
+    "status": "handoff-draft",
+    "note": "Contracts preserve known upcoming behavior without freezing unfinished interaction design."
+  },
+  "data": {
+    "librarySourceNode": "figjam:th3pf9uMwe14oRxdpHGPuD/40000067:5275",
+    "strategy": "Use prerendered JSON for initial page load. Decode raw image payloads lazily for playback/debug views.",
+    "recordShape": {
+      "image": "source image path",
+      "out": "encoded stegassette image path",
+      "audio": "entries item with path/start/end/sr/ch/bits/mode/layout",
+      "metadata": "entries item named Metadata",
+      "description": "entries item named Description",
+      "details": "entries item named Details",
+      "source": "entries item named Source",
+      "parameters": "combine/traversal/keymap/border/aspect/pack/channels"
+    }
+  },
+  "components": {
+    "WebglHeader": {
+      "purpose": "Full-bleed identity header with encoded images floating through WebGL.",
+      "tokens": ["surface.inverse", "type.display.brand", "type.hero.kicker"],
+      "states": ["loading", "ready", "reduced-motion"],
+      "implementationNotes": ["Honor prefers-reduced-motion.", "Use prerendered thumbnails before WebGL scene initializes."]
+    },
+    "LibraryCard": {
+      "purpose": "Playable encoded image card.",
+      "tokens": ["type.library.title", "type.library.meta", "surface.inverse", "color.text.inverse"],
+      "states": ["idle", "hover", "focused", "playing", "loading", "error"],
+      "interactions": ["tap/click starts playback", "keyboard activation starts playback", "active card syncs with PlayerDock"]
+    },
+    "PlayerDock": {
+      "purpose": "On-screen playback control shared by library cards and detail sections.",
+      "tokens": ["type.player.title", "type.player.control", "surface.raised", "size.layout.player-height"],
+      "states": ["hidden", "loading", "playing", "paused", "decoding", "error"],
+      "interactions": ["play/pause", "scrub", "show raw decode", "show metadata"]
+    },
+    "ParameterReference": {
+      "purpose": "Expandable, eventually interactive reference for combine/traversal/keymap/border/channel options.",
+      "tokens": ["type.parameter.label", "type.parameter.value", "surface.raised", "color.border.divider"],
+      "states": ["collapsed", "expanded", "selected", "demonstrating"],
+      "implementationNotes": ["Current design is a static placeholder.", "Reserve room for richer controls/prototypes."]
+    },
+    "DataKeyPixelExplorer": {
+      "purpose": "Interactive explainer for data pixel / key pixel relationships.",
+      "tokens": ["type.interactive.annotation", "surface.subtle", "color.border.divider"],
+      "states": ["idle", "hover-data", "hover-key", "selected-pair", "playing"]
+    },
+    "FeatureRecord": {
+      "purpose": "Large detail section using alternating image themes for every encoded image.",
+      "tokens": ["type.display.feature", "type.body.editorial", "type.meta.label", "type.meta.value"],
+      "states": ["default", "playing", "expanded-metadata"]
+    }
+  }
+}
