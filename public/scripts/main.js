@@ -303,27 +303,6 @@ function updateSpotlightReveal(section, progress, playing) {
 
 // ---------- Section background ----------
 
-function initSectionBackground() {
-  const shell = $(".site-shell");
-  if (!shell || !("IntersectionObserver" in window)) return;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        const bg = getComputedStyle(entry.target).backgroundColor;
-        document.documentElement.style.setProperty("--page-bg", bg);
-      }
-    },
-    { root: shell, rootMargin: "-50% 0px -50% 0px", threshold: 0 },
-  );
-
-  const sections = $$(
-    ".hero-section, .concept-band, .library-section, .track-spotlight, " +
-    ".pattern-overview-section, .interactive-section",
-  );
-  sections.forEach((el) => observer.observe(el));
-}
 
 // ---------- Pattern overview ----------
 
@@ -559,7 +538,6 @@ function init() {
   renderExplorerOptions();
   initHeader(textureUrls);
   animatePatternOverview();
-  initSectionBackground();
 
   $("#combine-select")?.addEventListener("change", (e) => {
     selectedCombine = e.target.value;

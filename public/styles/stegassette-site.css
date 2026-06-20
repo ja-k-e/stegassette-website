@@ -3,21 +3,14 @@
 }
 
 html {
-  /* --page-bg is updated by JS IntersectionObserver to match the visible section.
-     Defaults to black (hero) so mobile overscroll at the top shows the right color. */
-  background: var(--page-bg, var(--color-background-inverse));
+  background: var(--color-primitive-black);
   color: var(--color-text-default);
-  height: 100%;
-  overflow: hidden;
-  transition: background-color 0.35s ease;
 }
 
 body {
   margin: 0;
-  height: 100%;
   font-family: var(--font-family-body), Georgia, serif;
   background: transparent;
-  overflow: hidden;
 }
 
 a {
@@ -55,7 +48,6 @@ img {
 }
 
 .site-shell {
-  height: 100dvh;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth;
@@ -310,7 +302,7 @@ img {
 .card-meta {
   display: grid;
   gap: var(--size-space-8);
-  padding: var(--size-space-12);
+  padding: var(--size-space-12) 0;
 }
 
 .card-meta p {
