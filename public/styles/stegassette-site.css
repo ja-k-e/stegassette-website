@@ -5,12 +5,14 @@
 html {
   background: var(--color-primitive-black);
   color: var(--color-text-default);
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   font-family: var(--font-family-body), Georgia, serif;
   background: transparent;
+  overflow-x: hidden;
 }
 
 a {
@@ -40,18 +42,15 @@ img {
   width: 1px;
   height: 1px;
   padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  margin: 0;
+  overflow: clip;
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }
 
 .site-shell {
-  overflow-x: hidden;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+  width: 100%;
 }
 
 .hero-section {
@@ -556,6 +555,11 @@ img {
 .spotlight-copy {
   display: grid;
   gap: var(--size-space-24);
+  min-width: 0;
+}
+
+.spotlight-copy h2 {
+  overflow-wrap: anywhere;
 }
 
 .spotlight-copy p,
@@ -626,7 +630,7 @@ img {
 
 .meta-list {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
   gap: var(--size-space-12) var(--size-space-16);
   margin: 0;
 }
@@ -670,6 +674,7 @@ img {
   display: grid;
   gap: var(--size-space-24);
   align-content: start;
+  min-width: 0;
 }
 
 .combine-select-wrap {
@@ -683,6 +688,7 @@ img {
 
 #combine-select {
   width: 100%;
+  min-width: 0;
   padding: var(--size-space-8) var(--size-space-12);
   border-radius: var(--size-radius-md);
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -781,7 +787,7 @@ pre {
 @media (min-width: 40rem) {
   .traversal-col {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
     align-content: start;
     gap: var(--size-space-24) var(--size-space-16);
   }
@@ -809,12 +815,14 @@ pre {
   display: grid;
   align-content: start;
   gap: var(--size-space-24);
+  min-width: 0;
 }
 
 .explorer-selects {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--size-space-8);
+  min-width: 0;
 }
 
 .explorer-select-group {
@@ -824,7 +832,7 @@ pre {
 
 .explorer-speed-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: var(--size-space-12);
   align-items: center;
 }
@@ -832,6 +840,7 @@ pre {
 #traversal-select,
 #keymap-select {
   width: 100%;
+  min-width: 0;
   padding: var(--size-space-8) var(--size-space-12);
   border-radius: var(--size-radius-md);
   border: 1px solid rgba(255, 255, 255, 0.18);
