@@ -2002,9 +2002,12 @@
       </footer>
     </main>
 
-    <script src="./references/lib/steg-core.js"></script>
+    <!-- Vendored from stegassette/lib/steg-core.js. Sync with `npm run codec:check`
+         in that repo; the version below is logged on boot so drift is visible. -->
+    <script src="./lib/steg-core.js"></script>
     <script>
       window.StegCore = StegCore;
+      console.log("stegassette codec " + StegCore.CODEC_VERSION);
     </script>
     <script type="module" src="./scripts/main.js"></script>
   </body>

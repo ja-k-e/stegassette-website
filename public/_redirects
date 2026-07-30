@@ -1,0 +1,4 @@
+# /references/ used to serve a frozen June-2026 fork of the stegassette editor.
+# The live editor is make.stega.now; the fork is gone rather than maintained.
+/references/*  https://make.stega.now/:splat  301
+/references    https://make.stega.now/        301

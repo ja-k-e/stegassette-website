@@ -35,6 +35,13 @@
 // ============================================================
 
 const StegCore = (() => {
+  // CODEC_VERSION identifies this *implementation*, not the on-disk format
+  // (that's STGC_VERSION). Bump it on any change to encode/decode behaviour.
+  // Consumers that vendor a copy of this file log it on boot, so a stale copy
+  // is visible in the console instead of silently decoding wrong. Compare
+  // copies across repos with `npm run codec:check`.
+  const CODEC_VERSION = "2026.07.29";
+
   // ---- Img class (Buffer, Uint8Array, Uint8ClampedArray) -----
   class Img {
     constructor(width, height, data) {
@@ -87,8 +94,17 @@ const StegCore = (() => {
   }
 
   // ---- capacity helpers -------------------------------------
+  // Even rows carry the odd x's, odd rows the even x's. The previous form
+  // (floor(W/2)*H + ceil(H/2) when W was odd) over-counted by one whenever
+  // BOTH dimensions were odd. Paths are allocated at this size, so the spare
+  // slot stayed 0 — a phantom entry pointing at interior (0,0), which is a KEY
+  // pixel. Sorted traversals (angle, bayer, polar) sorted it to the front and
+  // shifted the entire path. Matches @amplib/steganography.
   function dataPixelCount(W, H) {
-    return Math.floor(W / 2) * H + (W % 2 === 0 ? 0 : Math.ceil(H / 2));
+    return (
+      Math.floor(W / 2) * Math.ceil(H / 2) +
+      Math.ceil(W / 2) * Math.floor(H / 2)
+    );
   }
   function borderPixelCount(W, H, B) {
     return W * H - (W - 2 * B) * (H - 2 * B);
@@ -96,49 +112,50 @@ const StegCore = (() => {
 
   // ---- keymaps (local interior coords: lx = x-B, ly = y-B) --
   const KEYMAP_NAMES = ["adjacent", "poles", "mirror-x", "mirror-y", "offset", "rotate"];
+
+  // Snap a target to the nearest IN-INTERIOR key pixel. Keys must never land on
+  // the border ring: the header rewrites ring alpha, and canvases
+  // premultiply-round the RGB of any pixel with alpha < 255, silently
+  // corrupting whatever bytes were keyed against it. Stepping ±1 in x without
+  // a bounds check (as this did) keyed the first and last column of every row
+  // against the ring. Matches @amplib/steganography.
+  function snapToKey(px, py, IW, IH) {
+    if (!isDataPixel(px, py)) return [px, py];
+    const inRow = py % 2 === 0 ? px - 1 : px + 1;
+    if (inRow >= 0 && inRow < IW) return [inRow, py];
+    // Orphan: this column has no in-row partner, which happens to the last
+    // column of every odd row on an odd-width interior. Step a row instead —
+    // the checkerboard parity flips, so the same column is a key pixel there,
+    // and it is one no other data pixel claims (on the neighbouring row the
+    // keys run 0, 2, … IW-3). Reflecting back in-row would instead hand two
+    // data pixels the same key, and a key-modifying combine cannot survive
+    // that: the second write destroys the bits the first stashed.
+    return [px, py > 0 ? py - 1 : Math.min(py + 1, IH - 1)];
+  }
+
   const KEYMAP = {
-    adjacent: (dx, dy) => (dy % 2 === 0 ? [dx - 1, dy] : [dx + 1, dy]),
-    poles: (dx, dy, W, H) => {
-      const px = W - 1 - dx,
-        py = H - 1 - dy;
-      return isDataPixel(px, py)
-        ? py % 2 === 0
-          ? [px - 1, py]
-          : [px + 1, py]
-        : [px, py];
-    },
-    "mirror-x": (dx, dy, W) => {
-      const px = W - 1 - dx;
-      return isDataPixel(px, dy)
-        ? dy % 2 === 0
-          ? [px - 1, dy]
-          : [px + 1, dy]
-        : [px, dy];
-    },
-    "mirror-y": (dx, dy, W, H) => {
-      const py = H - 1 - dy;
-      return isDataPixel(dx, py)
-        ? py % 2 === 0
-          ? [dx - 1, py]
-          : [dx + 1, py]
-        : [dx, py];
-    },
-    // offset: key = data position + (kx, ky) wrapped torus-style, snapped to key pixel.
-    // (0,0) degenerates to the data pixel's own neighbor; large offsets give double exposure.
+    // one pixel left on even rows, one right on odd rows, reflected back
+    // inside the interior at the edges
+    adjacent: (dx, dy, W, H) => snapToKey(dx, dy, W, H),
+    // diagonally opposite corner (180° rotation), then nearest key pixel
+    poles: (dx, dy, W, H) => snapToKey(W - 1 - dx, H - 1 - dy, W, H),
+    // horizontally flipped, then nearest key pixel
+    "mirror-x": (dx, dy, W, H) => snapToKey(W - 1 - dx, dy, W, H),
+    // vertically flipped, then nearest key pixel
+    "mirror-y": (dx, dy, W, H) => snapToKey(dx, H - 1 - dy, W, H),
+    // offset: key = data position + (kx, ky) wrapped torus-style, snapped to a
+    // key pixel. (0,0) degenerates to the data pixel's own neighbour; large
+    // offsets give double exposure.
     offset: (dx, dy, W, H, p = {}) => {
       const ox = (((dx + (p.kx | 0)) % W) + W) % W;
       const oy = (((dy + (p.ky | 0)) % H) + H) % H;
-      return isDataPixel(ox, oy)
-        ? oy % 2 === 0 ? [ox - 1, oy] : [ox + 1, oy]
-        : [ox, oy];
+      return snapToKey(ox, oy, W, H);
     },
     // rotate: 90° clockwise pairing normalized to the interior aspect.
     rotate: (dx, dy, W, H) => {
       const px = Math.round((1 - (H > 1 ? dy / (H - 1) : 0)) * (W - 1));
       const py = Math.round((W > 1 ? dx / (W - 1) : 0) * (H - 1));
-      return isDataPixel(px, py)
-        ? py % 2 === 0 ? [px - 1, py] : [px + 1, py]
-        : [px, py];
+      return snapToKey(px, py, W, H);
     },
   };
 
@@ -625,12 +642,46 @@ const StegCore = (() => {
     return 1 + Math.max(0, Math.floor(f));
   }
 
+  // Border-row pixels the STGC header will occupy — the minimum WIDTH any
+  // encoded canvas can have. Header length is 12 + descriptor + 1 checksum, and
+  // the descriptor depends only on the effect settings, so this is knowable
+  // before the canvas is sized. Each byte rides TWO border pixels as nibbles,
+  // hence the doubling, plus the B bootstrap and even-offset alignment.
+  // Deliberately a slight over-estimate (widest seed, slack): it's used as a
+  // floor, and a canvas a few pixels wider than strictly needed costs nothing.
+  function stgcHeaderWidth(opts = {}) {
+    const plan =
+      opts.plan || normalizeChannelPlan(opts, opts.bytesPerSample ?? 3, 0);
+    const params = { ...(opts.params || {}) };
+    if ((opts.traversal || "raster") === "fisher-yates" && params.seed == null)
+      params.seed = 0xffffffff;
+    return (
+      packStgcHeader({
+        combine: opts.combine || "xor",
+        keyMap: opts.keyMap || "adjacent",
+        traversal: opts.traversal || "raster",
+        interiorByteLength: 0,
+        entryCount: 0,
+        params,
+        ch:
+          _isDefaultPlan(plan) || plan.broadcast
+            ? undefined
+            : serializeChannelPlan(plan.slots),
+        pad: plan.pad,
+        pack: plan.pack,
+      }).length *
+        2 +
+      8
+    );
+  }
+
   function autoScaleImg(
     img,
     totalBytes,
     B = 1,
     aspectOverride = null,
     bytesPerPixel = 3,
+    minWidth = 0,
   ) {
     const dataPx = Math.ceil(totalBytes / bytesPerPixel);
     const aspect =
@@ -638,7 +689,21 @@ const StegCore = (() => {
 
     // size the interior so the FULL canvas (interior + border) is at `aspect` —
     // otherwise a large border drifts the canvas aspect and stretches the cover.
-    const { IW, IH } = interiorDims(dataPx, aspect, B);
+    let { IW, IH } = interiorDims(dataPx, aspect, B);
+
+    // a tiny payload (a text-only data cartridge) can size the canvas below the
+    // header's width — widen to the floor, keep the aspect, keep the capacity
+    if (minWidth && IW + 2 * B < minWidth) {
+      IW = Math.max(2, minWidth - 2 * B);
+      IH = Math.max(2, Math.round((IW + 2 * B) / aspect) - 2 * B);
+      while (dataPixelCount(IW, IH) < dataPx) IH++;
+    }
+
+    // Dimensions are left exactly as the payload and aspect ask for. Nudging
+    // the width to dodge the odd-width orphan (see snapToKey) would take a
+    // square interior off-square, and the `rotate` keymap is only injective
+    // while it is square — that corrupted a real cartridge. The orphan is
+    // handled in the keymap instead.
 
     // total canvas = interior + border on every side
     const newW = IW + 2 * B,
@@ -764,27 +829,75 @@ const StegCore = (() => {
     throw new Error("STGC header checksum mismatch");
   }
 
-  // Read header from alpha channel of border pixels.
-  // alpha(0,0) = B low byte; 0 = sentinel meaning 2-byte B follows in bpx[1] and bpx[2].
+  // Header bytes ride the border alpha as high/low nibble pairs, so every
+  // header pixel keeps alpha >= 240 and the border renders as good as opaque.
+  // A nibble n is stored as alpha 255 - n; an untouched border pixel (255)
+  // reads back as nibble 0. Matches @amplib/steganography.
+  function _nibbleByte(alphaHi, alphaLo) {
+    return (((255 - alphaHi) & 0xf) << 4) | ((255 - alphaLo) & 0xf);
+  }
+
+  // Read the header from the border alpha. Current images store nibble pairs;
+  // before that the format stored one raw byte per pixel — which rendered the
+  // header as a nearly transparent strip — so all three layouts are tried in
+  // turn: nibble pairs, then whole bytes inverted, then whole bytes raw.
   function unpackStgcHeaderAlpha(img) {
-    let B = img.getAlpha(0, 0);
+    try {
+      return _unpackNibbles(img);
+    } catch (_) {
+      try {
+        return _unpackWholeBytes(img, (a) => 255 - a);
+      } catch (__) {
+        return _unpackWholeBytes(img, (a) => a);
+      }
+    }
+  }
+
+  function _unpackNibbles(img) {
+    // bootstrap B from the ring start — raster order makes the first pixels
+    // identical for every border width
+    const tmpBpx = getBorderPixels(img.width, img.height, 1);
+    if (tmpBpx.length < 6) throw new Error("not a STGC image");
+    const alphaAt = (i) => img.getAlpha(tmpBpx[i][0], tmpBpx[i][1]);
+    let B = _nibbleByte(alphaAt(0), alphaAt(1));
     if (B === 0) {
-      // 2-byte B: enumerate with B=1 to find fixed pixel positions (1,0) and (2,0)
-      const tmpBpx = getBorderPixels(img.width, img.height, 1);
-      if (tmpBpx.length < 3) throw new Error("not a STGC image");
-      B = img.getAlpha(tmpBpx[1][0], tmpBpx[1][1]) |
-          (img.getAlpha(tmpBpx[2][0], tmpBpx[2][1]) << 8);
+      B =
+        _nibbleByte(alphaAt(2), alphaAt(3)) |
+        (_nibbleByte(alphaAt(4), alphaAt(5)) << 8);
       if (B === 0) throw new Error("not a STGC image");
     }
     const bpx = getBorderPixels(img.width, img.height, B);
+    const bytes = new Uint8Array(bpx.length >> 1);
+    for (let i = 0; i < bytes.length; i++)
+      bytes[i] = _nibbleByte(
+        img.getAlpha(bpx[i * 2][0], bpx[i * 2][1]),
+        img.getAlpha(bpx[i * 2 + 1][0], bpx[i * 2 + 1][1]),
+      );
+    return _parseRingBytes(bytes, B);
+  }
 
-    // read all border pixel alpha values and scan for STGC magic
+  function _unpackWholeBytes(img, read) {
+    let B = read(img.getAlpha(0, 0));
+    if (B === 0) {
+      // 2-byte B: enumerate with B=1 to find fixed pixel positions
+      const tmpBpx = getBorderPixels(img.width, img.height, 1);
+      if (tmpBpx.length < 3) throw new Error("not a STGC image");
+      B =
+        read(img.getAlpha(tmpBpx[1][0], tmpBpx[1][1])) |
+        (read(img.getAlpha(tmpBpx[2][0], tmpBpx[2][1])) << 8);
+      if (B === 0) throw new Error("not a STGC image");
+    }
+    const bpx = getBorderPixels(img.width, img.height, B);
     const alphas = new Uint8Array(bpx.length);
     for (let i = 0; i < bpx.length; i++)
-      alphas[i] = img.getAlpha(bpx[i][0], bpx[i][1]);
+      alphas[i] = read(img.getAlpha(bpx[i][0], bpx[i][1]));
+    return _parseRingBytes(alphas, B);
+  }
 
+  // Locate the magic in the ring byte sequence and unpack the fields.
+  function _parseRingBytes(alphas, B) {
     let magicOff = -1;
-    for (let i = 0; i <= bpx.length - 4; i++) {
+    for (let i = 0; i <= alphas.length - 4; i++) {
       if (
         alphas[i] === 0x53 &&
         alphas[i + 1] === 0x54 &&
@@ -801,7 +914,7 @@ const StegCore = (() => {
 
     const descLen = alphas[magicOff + 10];
     const hdrLen = 12 + descLen + 1;
-    if (magicOff + hdrLen > bpx.length)
+    if (magicOff + hdrLen > alphas.length)
       throw new Error("STGC header extends beyond border");
 
     const hdr = alphas.slice(magicOff, magicOff + hdrLen);
@@ -936,6 +1049,216 @@ const StegCore = (() => {
     const sorted = Array.from({ length: pathLen }, (_, i) => i);
     sorted.sort((a, b) => pixelRevealFrame[a] - pixelRevealFrame[b] || a - b);
     return new Int32Array(sorted);
+  }
+
+  // ---- reconstruction ---------------------------------------
+  // These ops leave the key (non-data) pixel untouched, so the original cover
+  // value survives exactly in it. difference / noise / echo move BOTH pixels
+  // and can only be rebuilt per data+key pair.
+  const KEY_PRESERVING = new Set([
+    "xor",
+    "additive",
+    "subtractive",
+    "bitshift",
+    "midpoint",
+    "signed",
+    "veil",
+    "whisper",
+  ]);
+
+  // computeRecon: rebuild a viewable cover image from an encoded container.
+  // encImg is the decoded PNG, pathIdx the interior path from getPathIndices,
+  // opts the decode opts from decodeContainer (plan/keyMap/params/borderWidth/
+  // interiorByteLength). Returns { data: Uint8ClampedArray RGBA, width, height }
+  // — half resolution when every active channel is key-preserving (or mixed),
+  // full resolution only for pure difference/noise/echo plans.
+  function computeRecon(encImg, pathIdx, opts) {
+    const W = encImg.width,
+      H = encImg.height;
+    const px = encImg.data;
+    const B = opts.borderWidth || 1;
+    const IW = W - 2 * B,
+      IH = H - 2 * B;
+    const params = opts.params || {};
+    const km = KEYMAP[opts.keyMap || "adjacent"];
+    if (!km) throw new Error(`unknown keymap: ${opts.keyMap}`);
+    const plan = _resolvePlan(opts);
+    const bytesPerPixel = plan.bytesPerPixel || plan.slots.length;
+    const dataXY = (pi) => {
+      const v = pathIdx[pi];
+      return [(v % IW) + B, ((v / IW) | 0) + B];
+    };
+    const keyXY = (pi) => {
+      const v = pathIdx[pi];
+      const lx = v % IW,
+        ly = (v / IW) | 0;
+      const [klx, kly] = km(lx, ly, IW, IH, params);
+      return [klx + B, kly + B];
+    };
+    // per-channel combine from the plan; channels with no slot are
+    // passthrough (carry no data → keep the encoded/source value).
+    const chCombine = [null, null, null];
+    for (const s of plan.slots) chCombine[s.ch] = s.combine;
+    const realOnly = chCombine.every(
+      (c) => c == null || KEY_PRESERVING.has(c),
+    );
+    // mixed plan: at least one key-preserving channel alongside a
+    // difference/noise/echo one. The full-res pass runs (below), then
+    // we decimate it to half-res keeping only the real/restored key
+    // pixels — so even mixed plans avoid fabricated data pixels.
+    const hasKeyPreserving = chCombine.some(
+      (c) => c != null && KEY_PRESERVING.has(c),
+    );
+    let reconData, reconW, reconH;
+    if (realOnly) {
+      // Real-only reconstruction: rather than fabricating each data
+      // pixel from its 4 neighbours (the old path — a checkerboard
+      // blur), drop them. Every 2×2 block keeps its two real key
+      // pixels — the (even,even) and (odd,odd) diagonal corners, which
+      // were never overwritten — averaged into one output pixel. Half
+      // resolution, but made only of true cover pixels (no guessing).
+      reconW = (W + 1) >> 1;
+      reconH = (H + 1) >> 1;
+      reconData = new Uint8ClampedArray(reconW * reconH * 4);
+      for (let by = 0; by < reconH; by++) {
+        for (let bx = 0; bx < reconW; bx++) {
+          const x0 = bx << 1,
+            y0 = by << 1;
+          const tl = (y0 * W + x0) * 4;
+          const x1 = x0 + 1,
+            y1 = y0 + 1;
+          const hasBR = x1 < W && y1 < H;
+          const br = hasBR ? (y1 * W + x1) * 4 : tl;
+          const o = (by * reconW + bx) * 4;
+          for (let c = 0; c < 3; c++) {
+            // some ops stash audio bits in key low bits; mask them out
+            const KEY_MASK = { midpoint: 0xfe, veil: 0xfc, whisper: 0xf0 };
+            const m = KEY_MASK[chCombine[c]] ?? 0xff;
+            reconData[o + c] = hasBR
+              ? ((px[tl + c] & m) + (px[br + c] & m) + 1) >> 1
+              : px[tl + c] & m;
+          }
+          reconData[o + 3] = 255;
+        }
+      }
+    } else {
+      reconW = W;
+      reconH = H;
+      reconData = new Uint8ClampedArray(px);
+      // encode stops once the data stream is exhausted, so only the
+      // first nEnc data pixels were touched — the rest stay original.
+      // Reconstructing past nEnc would corrupt those (esp. echo, where
+      // key^data on an untouched pair = origKey^origData = noise).
+      const nEnc = Math.min(
+        pathIdx.length,
+        Math.ceil((opts.interiorByteLength || 0) / bytesPerPixel),
+      );
+      for (let pi = 0; pi < nEnc; pi++) {
+        const [dx, dy] = dataXY(pi);
+        const eo = (dy * W + dx) * 4;
+        for (let c = 0; c < 3; c++) {
+          if (chCombine[c] == null) {
+            reconData[eo + c] = px[eo + c]; // passthrough = source
+            continue;
+          }
+          const m = chCombine[c] === "midpoint" ? 0xfe : 0xff;
+          let acc = 0,
+            n = 0;
+          for (const [nx, ny] of [
+            [dx - 1, dy],
+            [dx + 1, dy],
+            [dx, dy - 1],
+            [dx, dy + 1],
+          ]) {
+            if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
+              acc += px[(ny * W + nx) * 4 + c] & m;
+              n++;
+            }
+          }
+          reconData[eo + c] = n ? Math.round(acc / n) : 0;
+        }
+      }
+      // restore key-pixel symmetry per channel for midpoint/difference/echo
+      for (let i = 0; i < nEnc; i++) {
+        const [dx, dy] = dataXY(i),
+          [kx, ky] = keyXY(i);
+        const doff = (dy * W + dx) * 4,
+          koff = (ky * W + kx) * 4;
+        for (let c = 0; c < 3; c++) {
+          if (chCombine[c] === "midpoint") {
+            reconData[koff + c] &= 0xfe;
+          } else if (chCombine[c] === "difference") {
+            let sp = px[koff + c],
+              dp = px[doff + c];
+            if (sp < dp) sp += 256;
+            const mid = Math.round((sp - dp) / 2 + dp) & 0xff;
+            reconData[doff + c] = mid;
+            reconData[koff + c] = mid;
+          } else if (chCombine[c] === "echo") {
+            // origKey = newKey ^ audio, and audio = data pixel → key ^ data
+            reconData[koff + c] = px[koff + c] ^ px[doff + c];
+          }
+        }
+      }
+      // echo: the first pass interpolated data pixels from the *encoded*
+      // neighbors, but with echo those neighbors are noisy (origKey^audio).
+      // Now that keys are restored exactly, re-interpolate from the clean
+      // values. (Bounded to nEnc so the untouched tail stays original.)
+      if (chCombine.some((c) => c === "echo")) {
+        for (let pi = 0; pi < nEnc; pi++) {
+          const [dx, dy] = dataXY(pi);
+          const eo = (dy * W + dx) * 4;
+          for (let c = 0; c < 3; c++) {
+            if (chCombine[c] !== "echo") continue;
+            let acc = 0,
+              n = 0;
+            for (const [nx, ny] of [
+              [dx - 1, dy],
+              [dx + 1, dy],
+              [dx, dy - 1],
+              [dx, dy + 1],
+            ]) {
+              if (nx >= 0 && nx < W && ny >= 0 && ny < H) {
+                acc += reconData[(ny * W + nx) * 4 + c];
+                n++;
+              }
+            }
+            if (n) reconData[eo + c] = Math.round(acc / n);
+          }
+        }
+      }
+      // Mixed plan: decimate the full-res recon to half-res, sampling
+      // only the two key pixels per 2×2 block (the (even,even)+(odd,odd)
+      // diagonal). Those hold real values for key-preserving channels
+      // and restored values for difference/echo — never the fabricated
+      // data pixels — so the result is all-real/restored at half res.
+      if (hasKeyPreserving) {
+        const rw = (W + 1) >> 1,
+          rh = (H + 1) >> 1;
+        const half = new Uint8ClampedArray(rw * rh * 4);
+        for (let by = 0; by < rh; by++) {
+          for (let bx = 0; bx < rw; bx++) {
+            const x0 = bx << 1,
+              y0 = by << 1;
+            const tl = (y0 * W + x0) * 4;
+            const x1 = x0 + 1,
+              y1 = y0 + 1;
+            const hasBR = x1 < W && y1 < H;
+            const br = hasBR ? (y1 * W + x1) * 4 : tl;
+            const o = (by * rw + bx) * 4;
+            for (let c = 0; c < 3; c++)
+              half[o + c] = hasBR
+                ? (reconData[tl + c] + reconData[br + c] + 1) >> 1
+                : reconData[tl + c];
+            half[o + 3] = 255;
+          }
+        }
+        reconData = half;
+        reconW = rw;
+        reconH = rh;
+      }
+    }
+    return { data: reconData, width: reconW, height: reconH };
   }
 
   // ---- entry table helpers ----------------------------------
@@ -1150,34 +1473,51 @@ const StegCore = (() => {
   }
 
   // ---- encode / decode container ----------------------------
-  // Write header bytes to consecutive border pixels starting at bpx[offset].
-  // B ≤ 255: alpha(0,0) = B (1 byte, backward compat). minOffset = 1.
-  // B > 255: alpha(0,0) = 0 (sentinel), bpx[1].alpha = B_low, bpx[2].alpha = B_high. minOffset = 3.
-  // Default offset centers the header in the bottom row.
+  // Write the header into the border alpha, each byte riding two pixels as
+  // high/low nibbles (alpha = 255 - nibble) so every header pixel stays at
+  // alpha >= 240. Raw bytes per pixel rendered the header as a nearly
+  // transparent strip along the border. A zero byte lands on alpha 255
+  // exactly, so no zero-clamping is needed on this layout.
+  // B rides bytes at ring index 0-1; B > 255 uses a 0 sentinel there and
+  // two more bytes after it. Default offset centres the header in the
+  // bottom row. Must be called AFTER the interior write, since KEY_MOD ops
+  // may reset border alpha to 255.
   function _applyAlphaHeader(outImg, B, hdrBytes, offset) {
     const bpx = getBorderPixels(outImg.width, outImg.height, B);
+    const putByte = (index, byte) => {
+      outImg.setAlpha(bpx[index][0], bpx[index][1], 255 - ((byte >> 4) & 0xf));
+      outImg.setAlpha(bpx[index + 1][0], bpx[index + 1][1], 255 - (byte & 0xf));
+    };
     let minOffset;
     if (B > 255) {
-      outImg.setAlpha(0, 0, 0);                              // sentinel
-      outImg.setAlpha(bpx[1][0], bpx[1][1], B & 0xff);      // B_low
-      outImg.setAlpha(bpx[2][0], bpx[2][1], (B >> 8) & 0xff); // B_high
-      minOffset = 3;
+      putByte(0, 0); // sentinel
+      putByte(2, B & 0xff);
+      putByte(4, (B >> 8) & 0xff);
+      minOffset = 6;
     } else {
-      outImg.setAlpha(0, 0, B);
-      minOffset = 1;
+      putByte(0, B);
+      minOffset = 2;
     }
+
+    const headerPx = hdrBytes.length * 2;
+    if (minOffset + headerPx > bpx.length)
+      throw new Error("STGC header does not fit the border ring");
+
     if (offset == null) {
       // center in bottom row: find first bottom-row pixel in border sequence
       const H = outImg.height;
       const bottomStart = bpx.findIndex(([, py]) => py === H - 1);
       const bottomLen = outImg.width;
-      offset = bottomStart + ((bottomLen - hdrBytes.length) >> 1);
+      offset = bottomStart + ((bottomLen - headerPx) >> 1);
     }
-    offset = Math.max(minOffset, offset);
-    for (let i = 0; i < hdrBytes.length; i++) {
-      const b = hdrBytes[i];
-      outImg.setAlpha(bpx[offset + i][0], bpx[offset + i][1], b === 0 ? 1 : b);
-    }
+    // The ring is contiguous in index space and decode scans all of it, so a
+    // header that cannot centre in the bottom row simply starts earlier and
+    // flows across the other border pixels.
+    offset = Math.min(offset, bpx.length - headerPx);
+    // even ring index, so decode can pair pixels deterministically from 0
+    offset = Math.max(minOffset, offset) & ~1;
+    for (let i = 0; i < hdrBytes.length; i++)
+      putByte(offset + i * 2, hdrBytes[i]);
   }
 
   function encodeContainer(entries, srcImg, keyImg, opts) {
@@ -1214,9 +1554,11 @@ const StegCore = (() => {
       pack: plan.pack,
     });
 
-    if (hdrBytes.length > W)
+    // each header byte rides two border pixels, plus the B bootstrap
+    const headerPx = hdrBytes.length * 2 + 2;
+    if (headerPx > borderPixelCount(W, H, B))
       throw new Error(
-        `image too narrow for STGC header (need ${hdrBytes.length}px, width is ${W})`,
+        `border ring too small for STGC header (need ${headerPx}px, ring has ${borderPixelCount(W, H, B)})`,
       );
 
     _writeInterior(outImg, keyImg, stream, { ...opts, params, plan });
@@ -1372,6 +1714,8 @@ const StegCore = (() => {
     autoScaleImg,
     interiorDims,
     resolveBorderWidth,
+    stgcHeaderWidth,
+    CODEC_VERSION,
     STGC_MAGIC,
     STGC_VERSION,
     buildDescriptor,
@@ -1383,6 +1727,8 @@ const StegCore = (() => {
     layoutChannels,
     unlayoutChannels,
     computeRevealOrder,
+    KEY_PRESERVING,
+    computeRecon,
     buildInteriorStream,
     parseEntryTable,
     containerInteriorBytes,
